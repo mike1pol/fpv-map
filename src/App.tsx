@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Layout, Menu } from 'antd';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Layout.Header>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+          <Menu.Item key="1">Map</Menu.Item>
+          <Menu.Item key="2">Create Spot</Menu.Item>
+          <Menu.Item key="4">Login</Menu.Item>
+        </Menu>
+      </Layout.Header>
+      <Layout.Content>
+
+      </Layout.Content>
+      <Layout.Footer style={{ textAlign: 'center' }}>
+        FPV Map ©2021 Created by Mikhail Poluboyarinov
+      </Layout.Footer>
+    </Layout>
   );
 }
 
