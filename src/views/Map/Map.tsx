@@ -53,6 +53,7 @@ export const MapView: React.FC = () => {
     return () => {
       uns();
     };
+    //eslint-disable-next-line
   }, [undefined]);
   // const onLoad = useCallback((mapC) => {
   //   console.log("onLoad", googleMapKey);
