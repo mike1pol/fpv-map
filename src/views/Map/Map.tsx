@@ -53,7 +53,7 @@ export const MapView: React.FC = () => {
     return () => {
       uns();
     };
-  }, [col]);
+  }, [undefined]);
   // const onLoad = useCallback((mapC) => {
   //   console.log("onLoad", googleMapKey);
   //   const bounds = new (window as any).google.maps.LatLngBounds();
