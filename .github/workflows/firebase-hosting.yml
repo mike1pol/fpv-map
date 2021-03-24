@@ -4,15 +4,16 @@ on:
     branches:
       - master
 jobs:
-  build_and_preview:
+  deploy_live_website:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_GOOGLE_MAP: "${{ secrets.GOOGLE_MAP_API_KEY }}"
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FPV_MAP_20AAA }}'
-          projectId: fpv-map-20aaa
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: "${{ secrets.FIREBASE_PROJECT_ID }}"
+          channelId: live

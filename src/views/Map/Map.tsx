@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useFirestore } from "reactfire";
 import {
   GoogleMap,
@@ -8,7 +8,9 @@ import {
 } from "@react-google-maps/api";
 import { Typography } from "antd";
 import { Loading } from "../../components/Loading";
+import { googleMapKey } from "../../envs";
 
+// Saint-P
 const center = {
   lat: 59.939331,
   lng: 30.316053,
@@ -27,12 +29,11 @@ type Item = {
 
 export const MapView: React.FC = () => {
   const [list, setList] = useState<Item[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [map, setMap] = useState(null);
+  // const [map, setMap] = useState(null);
   const [info, setInfo] = useState<Item | null>(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCLpqC1KmBrmatY-N3tCXvbnrFIvTfbR2E",
+    googleMapsApiKey: googleMapKey,
   });
   const firestore = useFirestore();
   const col = firestore.collection("items");
@@ -53,22 +54,21 @@ export const MapView: React.FC = () => {
       uns();
     };
   }, [col]);
-  const onLoad = useCallback((mapC) => {
-    const bounds = new (window as any).google.maps.LatLngBounds();
-    mapC.fitBounds(bounds);
-    setMap(mapC);
-  }, []);
-
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
+  // const onLoad = useCallback((mapC) => {
+  //   console.log("onLoad", googleMapKey);
+  //   const bounds = new (window as any).google.maps.LatLngBounds();
+  //   mapC.fitBounds(bounds);
+  //   setMap(mapC);
+  // }, []);
+  //
+  // const onUnmount = useCallback(() => {
+  //   setMap(null);
+  // }, []);
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}
       center={center}
       zoom={11}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
     >
       {info && (
         <InfoWindow position={info.pos} onCloseClick={() => setInfo(null)}>
