@@ -1,8 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    match /items/{itemId} {
+      allow read: if true;
+      allow create: if request.auth != null && !request.resource.data.is_active && request.resource.data.is_active == 0;
+      allow delete, update: if request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+    }
+    match /users/{userId} {
+      allow read: if true;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+      allow delete: if false;
     }
   }
 }
