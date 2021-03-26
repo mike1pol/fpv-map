@@ -20,6 +20,10 @@ import { CreateView } from "./views/Create/Create";
 import { LoginView } from "./views/Login/Login";
 import { AppMenu } from "./components/AppMenu";
 import { Loading } from "./components/Loading";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { UserCheck } from "./components/UserCheck";
+
+import styles from "./app.module.css";
 
 const preloadSDKs = (firebaseApp: firebase.app.App) => {
   return Promise.all([
@@ -47,27 +51,25 @@ export const App: React.FC = () => {
   const firebaseApp = useFirebaseApp();
   preloadSDKs(firebaseApp).catch((err) => console.error(err));
   return (
-    <SuspenseWithPerf traceId={"firebase-app"} fallback={<Loading />}>
-      <Layout style={{ width: "100%", height: "100%" }}>
+    <SuspenseWithPerf traceId="firebase-app" fallback={<Loading />}>
+      <Layout className={styles.layout}>
         <Layout.Header>
           <AppMenu />
         </Layout.Header>
         <Layout.Content>
+          <UserCheck />
           <Switch>
-            <Route path="/" exact>
+            <PrivateRoute path="/" exact>
               <MapView />
-            </Route>
-            <Route path="/create" exact>
+            </PrivateRoute>
+            <PrivateRoute path="/create" exact>
               <CreateView />
-            </Route>
+            </PrivateRoute>
             <Route path="/login" exact>
               <LoginView />
             </Route>
           </Switch>
         </Layout.Content>
-        <Layout.Footer style={{ textAlign: "center" }}>
-          FPV Map ©2021 Created by Mikhail Poluboyarinov
-        </Layout.Footer>
       </Layout>
     </SuspenseWithPerf>
   );

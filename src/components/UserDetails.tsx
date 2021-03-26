@@ -26,7 +26,7 @@ export const UserDetails: React.FC = () => {
         </ul>
       </div>
       <div>
-        <Button onClick={signOut}>Sign Out</Button>
+        <Button onClick={signOut}>Выход</Button>
       </div>
     </div>
   );

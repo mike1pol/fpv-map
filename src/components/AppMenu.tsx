@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, matchPath, useLocation } from "react-router-dom";
-import { useUser } from "reactfire";
+import { useAuth, useUser } from "reactfire";
 import { Menu } from "antd";
 
 type menuLink = {
@@ -44,6 +44,9 @@ const hasMatchRoute = (path: string, link: string) => {
 export const AppMenu = () => {
   const location = useLocation();
   const { data: user } = useUser();
+  const auth = useAuth();
+  const signOut = () =>
+    auth.signOut().catch(() => console.error("Sign out error"));
   return (
     <Menu theme="dark" mode="horizontal">
       {menuLinks
@@ -65,6 +68,7 @@ export const AppMenu = () => {
             <Link to={i.url}>{i.title}</Link>
           </Menu.Item>
         ))}
+      {user && <Menu.Item onClick={() => signOut()}>Выход</Menu.Item>}
     </Menu>
   );
 };

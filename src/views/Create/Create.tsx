@@ -4,6 +4,7 @@ import { useFirestore } from "reactfire";
 import firebase from "firebase/app";
 
 import { CreateForm, FormValues } from "../../components/CreateForm";
+import { InviteCheck } from "../../components/InviteCheck/InviteCheck";
 
 export const CreateView: React.FC = () => {
   const [error, setError] = useState();
@@ -19,6 +20,7 @@ export const CreateView: React.FC = () => {
         name: values.name,
         description: values.description,
         pos,
+        video: values.video,
         is_active: false,
         like: 0,
       })
@@ -31,19 +33,21 @@ export const CreateView: React.FC = () => {
       });
   };
   return (
-    <div style={{ padding: "50px" }}>
-      <Typography.Title level={3}>Добавить спот</Typography.Title>
-      {error && <Alert message={error} type="error" />}
-      {success ? (
-        <Alert
-          message={
-            "Спот отправлен на модерацию в ближайшее время он появится на карте"
-          }
-          type="success"
-        />
-      ) : (
-        <CreateForm onSubmit={onSubmit} />
-      )}
-    </div>
+    <InviteCheck>
+      <div style={{ padding: "50px" }}>
+        <Typography.Title level={3}>Добавить спот</Typography.Title>
+        {error && <Alert message={error} type="error" />}
+        {success ? (
+          <Alert
+            message={
+              "Спот отправлен на модерацию в ближайшее время он появится на карте"
+            }
+            type="success"
+          />
+        ) : (
+          <CreateForm onSubmit={onSubmit} />
+        )}
+      </div>
+    </InviteCheck>
   );
 };
