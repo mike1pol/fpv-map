@@ -89,7 +89,7 @@ export const CreateForm: React.FC<CreateFormProps> = ({ onSubmit }) => {
             {fields.map((field, index) => (
               <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                label={index === 0 ? "Видео" : ""}
+                label={index === 0 ? "Видео/Фото" : ""}
                 required={false}
                 key={field.key}
               >
@@ -122,7 +122,7 @@ export const CreateForm: React.FC<CreateFormProps> = ({ onSubmit }) => {
                 style={{ width: "40%" }}
                 icon={<PlusOutlined />}
               >
-                Добавить видео
+                Добавить видео/фото
               </Button>
             </Form.Item>
           </>

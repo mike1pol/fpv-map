@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Alert, Typography } from "antd";
-import { useFirestore } from "reactfire";
+import { Alert, Button, Typography } from "antd";
+import { useFirestore, useUser } from "reactfire";
 import firebase from "firebase/app";
 
 import { CreateForm, FormValues } from "../../components/CreateForm";
@@ -9,8 +9,10 @@ import { InviteCheck } from "../../components/InviteCheck/InviteCheck";
 export const CreateView: React.FC = () => {
   const [error, setError] = useState();
   const [success, setSuccess] = useState(false);
+  const { data: user } = useUser();
   const firestore = useFirestore();
   const col = firestore.collection("items");
+  const colLinks = firestore.collection("items_links");
   const onSubmit = (values: FormValues) => {
     setError(undefined);
     setSuccess(false);
@@ -20,9 +22,27 @@ export const CreateView: React.FC = () => {
         name: values.name,
         description: values.description,
         pos,
-        video: values.video,
         is_active: false,
+        created_by: user.uid,
         like: 0,
+      })
+      .then<Promise<any>>((doc) => {
+        if (values.video && values.video.length > 0) {
+          return Promise.all(
+            values.video
+              .filter((v) => v && v.length > 0)
+              .map((v) => {
+                return colLinks.add({
+                  link: v,
+                  item: doc.id,
+                  is_active: false,
+                  created_by: user.uid,
+                });
+              })
+          );
+        } else {
+          return Promise.resolve();
+        }
       })
       .then(() => {
         setSuccess(true);
@@ -38,12 +58,17 @@ export const CreateView: React.FC = () => {
         <Typography.Title level={3}>Добавить спот</Typography.Title>
         {error && <Alert message={error} type="error" />}
         {success ? (
-          <Alert
-            message={
-              "Спот отправлен на модерацию в ближайшее время он появится на карте"
-            }
-            type="success"
-          />
+          <>
+            <Alert
+              message={
+                "Спот отправлен на модерацию в ближайшее время он появится на карте"
+              }
+              type="success"
+            />
+            <Button onClick={() => setSuccess(false)} type={"primary"}>
+              Добавить еще
+            </Button>
+          </>
         ) : (
           <CreateForm onSubmit={onSubmit} />
         )}

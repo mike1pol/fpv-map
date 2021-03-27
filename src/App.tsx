@@ -24,6 +24,9 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import { UserCheck } from "./components/UserCheck";
 
 import styles from "./app.module.css";
+import { UserContextView } from "./userContext";
+import { ModerRoute } from "./components/ModerRoute";
+import { ModerSpots } from "./views/Moder/Spots";
 
 const preloadSDKs = (firebaseApp: firebase.app.App) => {
   return Promise.all([
@@ -52,25 +55,30 @@ export const App: React.FC = () => {
   preloadSDKs(firebaseApp).catch((err) => console.error(err));
   return (
     <SuspenseWithPerf traceId="firebase-app" fallback={<Loading />}>
-      <Layout className={styles.layout}>
-        <Layout.Header>
-          <AppMenu />
-        </Layout.Header>
-        <Layout.Content>
-          <UserCheck />
-          <Switch>
-            <PrivateRoute path="/" exact>
-              <MapView />
-            </PrivateRoute>
-            <PrivateRoute path="/create" exact>
-              <CreateView />
-            </PrivateRoute>
-            <Route path="/login" exact>
-              <LoginView />
-            </Route>
-          </Switch>
-        </Layout.Content>
-      </Layout>
+      <UserContextView>
+        <Layout className={styles.layout}>
+          <Layout.Header>
+            <AppMenu />
+          </Layout.Header>
+          <Layout.Content>
+            <UserCheck />
+            <Switch>
+              <PrivateRoute path="/" exact>
+                <MapView />
+              </PrivateRoute>
+              <PrivateRoute path="/create" exact>
+                <CreateView />
+              </PrivateRoute>
+              <ModerRoute path="/moder/spots" exact>
+                <ModerSpots />
+              </ModerRoute>
+              <Route path="/login" exact>
+                <LoginView />
+              </Route>
+            </Switch>
+          </Layout.Content>
+        </Layout>
+      </UserContextView>
     </SuspenseWithPerf>
   );
 };

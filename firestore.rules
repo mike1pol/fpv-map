@@ -26,6 +26,15 @@ service cloud.firestore {
       allow update: if isModer() || isAdmin();
       allow delete : if isAdmin();
     }
+    // Items Links
+    // read, create - invited users
+    // update - admins, moders
+    // delete - admins
+    match /items_links/{linkId} {
+      allow read, create: if isInvited();
+      allow update: if isModer() || isAdmin();
+      allow delete : if isAdmin();
+    }
     // Profile
     // read, create - invited users
     // update - self / admins
@@ -38,7 +47,7 @@ service cloud.firestore {
     // Admin Users
     // crud - admins
     match /users/{userId} {
-      allow read: if isAdmin();
+      allow read: if isAdmin() || isModer() && request.auth.uid == userId;
       allow create, update, delete: if false;
     }
     // Invite user

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, matchPath, useLocation } from "react-router-dom";
-import { useAuth, useUser } from "reactfire";
+import { useAuth } from "reactfire";
 import { Menu } from "antd";
+import { UserContext } from "../userContext";
 
 type menuLink = {
   title: string;
   url: string;
   isAuth?: boolean;
   isAnonymous?: boolean;
+  isModer?: boolean;
+  isAdmin?: boolean;
 };
 
 const menuLinks: menuLink[] = [
@@ -19,6 +22,12 @@ const menuLinks: menuLink[] = [
     title: "Добавить спот",
     url: "/create",
     isAuth: true,
+  },
+  {
+    title: "Модерка спотов",
+    url: "/moder/spots",
+    isModer: true,
+    isAdmin: true,
   },
   {
     title: "Вход",
@@ -43,7 +52,7 @@ const hasMatchRoute = (path: string, link: string) => {
 
 export const AppMenu = () => {
   const location = useLocation();
-  const { data: user } = useUser();
+  const user = useContext(UserContext);
   const auth = useAuth();
   const signOut = () =>
     auth.signOut().catch(() => console.error("Sign out error"));
@@ -55,6 +64,16 @@ export const AppMenu = () => {
             return false;
           }
           return !(user && i.isAnonymous);
+        })
+        .filter((i) => {
+          if (!i.isAdmin && !i.isModer) {
+            return true;
+          } else if (user && i.isAdmin && user.isAdmin) {
+            return true;
+          } else if (user && i.isModer && user.isModer) {
+            return true;
+          }
+          return false;
         })
         .map((i) => (
           <Menu.Item
