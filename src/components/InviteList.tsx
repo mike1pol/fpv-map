@@ -61,7 +61,7 @@ export const InviteList: React.FC = () => {
       createdAt: new Date(),
     };
     col
-      .doc(values.email)
+      .doc(values.email.toLowerCase())
       .set(data)
       .then(() => {
         setInv("Инвайт создан, можно регистрироваться =)");
