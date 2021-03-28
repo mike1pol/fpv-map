@@ -14,7 +14,7 @@ export const UserContextView: React.FC = ({ children }) => {
   const { data } = useUser();
   const firestore = useFirestore();
   useEffect(() => {
-    if (data.uid) {
+    if (data && data.uid) {
       firestore
         .collection("users")
         .doc(data.uid)
