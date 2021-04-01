@@ -12,6 +12,7 @@ import { Layout } from "antd";
 
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/analytics";
 
 import { firebaseConfig } from "./firebase";
 
