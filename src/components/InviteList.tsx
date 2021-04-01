@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFirestore, useUser } from "reactfire";
 import { Loading } from "./Loading";
-import { Alert, Form, Input, Button, List } from "antd";
+import { notification, Alert, Form, Input, Button, List } from "antd";
 import styles from "./Map/style.module.css";
 
 type Invite = {
@@ -20,9 +20,10 @@ const validateMessages = {
 
 export const InviteList: React.FC = () => {
   const { data: user } = useUser();
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<Invite[]>([]);
   const [error, setError] = useState<string | undefined>();
-  const [inv, setInv] = useState<undefined | string>();
   const firestore = useFirestore();
   const col = firestore.collection("invite");
   useEffect(() => {
@@ -37,25 +38,26 @@ export const InviteList: React.FC = () => {
           });
         });
         setData(l);
+        setIsLoading(false);
       },
       (err) => {
         console.log(err);
         setError(err.message);
+        setIsLoading(false);
       }
     );
     return () => {
       uns();
     };
     //eslint-disable-next-line
-  }, [user.uid]);
-  if (data.length === 0 && !error) {
+  }, [user.uid, setIsLoading]);
+  if (isLoading && !error) {
     return <Loading />;
   }
   if (error) {
     return <Alert className={styles.alert} message={error} type={"error"} />;
   }
   const onFinish = (values: any) => {
-    setInv(undefined);
     const data = {
       invite: user.uid,
       createdAt: new Date(),
@@ -64,25 +66,24 @@ export const InviteList: React.FC = () => {
       .doc(values.email.toLowerCase())
       .set(data)
       .then(() => {
-        setInv("Инвайт создан, можно регистрироваться =)");
+        form.setFieldsValue({ email: "" });
+        notification.open({
+          message: "Инвайт создан, можно регистрироваться =)",
+          type: "success",
+        });
       })
       .catch((err) => {
-        setInv(`Ошибка отправки инвайта: ${err.message}`);
+        notification.open({
+          message: `Ошибка отправки инвайта: ${err.message}`,
+          type: "error",
+        });
       });
   };
   return (
     <>
-      {inv && (
-        <Alert
-          style={{ marginBottom: "20px", maxWidth: "400px" }}
-          message={inv}
-          type={"info"}
-          closable
-          afterClose={() => setInv(undefined)}
-        />
-      )}
       <Form
         layout={"inline"}
+        form={form}
         style={{ marginBottom: "20px" }}
         validateMessages={validateMessages}
         onFinish={onFinish}

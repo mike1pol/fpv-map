@@ -27,7 +27,7 @@ import { UserCheck } from "./components/UserCheck";
 import styles from "./app.module.css";
 import { UserContextView } from "./userContext";
 import { ModerRoute } from "./components/ModerRoute";
-import { ModerSpots } from "./views/Moder/Spots";
+import { Dashboard } from "./views/Admin/Dashboard";
 
 const preloadSDKs = (firebaseApp: firebase.app.App) => {
   return Promise.all([
@@ -71,7 +71,7 @@ export const App: React.FC = () => {
                 <CreateView />
               </PrivateRoute>
               <ModerRoute path="/moder/spots" exact>
-                <ModerSpots />
+                <Dashboard />
               </ModerRoute>
               <Route path="/login" exact>
                 <LoginView />

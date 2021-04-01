@@ -24,12 +24,6 @@ const menuLinks: menuLink[] = [
     isAuth: true,
   },
   {
-    title: "Модерка спотов",
-    url: "/moder/spots",
-    isModer: true,
-    isAdmin: true,
-  },
-  {
     title: "Вход",
     url: "/login",
     isAnonymous: true,
@@ -38,6 +32,11 @@ const menuLinks: menuLink[] = [
     title: "Профиль",
     url: "/login",
     isAuth: true,
+  },
+  {
+    title: "Админ Панель",
+    url: "/admin",
+    isAdmin: true,
   },
 ];
 
