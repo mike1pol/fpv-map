@@ -1,0 +1,19 @@
+name: Deploy to Firebase Hosting
+on:
+  push:
+    branches:
+      - beta
+jobs:
+  deploy_live_website:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_GOOGLE_MAP: "${{ secrets.GOOGLE_MAP_API_KEY }}"
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm ci && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_BETA_SERVICE_ACCOUNT }}"
+          projectId: "${{ secrets.FIREBASE_BETA_PROJECT_ID }}"
+          channelId: live
