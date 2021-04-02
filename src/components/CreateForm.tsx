@@ -128,7 +128,6 @@ export const CreateForm: React.FC<CreateFormProps> = ({ onSubmit, form }) => {
           <Form.Item
             {...formItemLayout}
             name={"is_active"}
-            initialValue={false}
             valuePropName={"checked"}
             label="Включен?"
           >

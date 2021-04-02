@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REACT_APP_GOOGLE_MAP: "${{ secrets.GOOGLE_MAP_API_KEY }}"
+      REACT_APP_SENTRY: "${{ secrets.SENTRY_BETA }}"
       REACT_APP_DEV: "true"
     steps:
       - uses: actions/checkout@v2
