@@ -6,9 +6,9 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { googleMapKey } from "../../envs";
-import { Alert, Button, Typography } from "antd";
+import { Button, Typography } from "antd";
 import { Loading } from "../Loading";
-import { useFirestore, useUser } from "reactfire";
+import { useFirestore } from "reactfire";
 
 import styles from "./style.module.css";
 import { AddLink } from "../AddLink";
@@ -23,7 +23,6 @@ export type MapItem = {
   id: string;
   name: string;
   description: string;
-  like: number;
   video?: string[];
   pos: {
     lat: number;
@@ -31,11 +30,13 @@ export type MapItem = {
   };
 };
 
-export const Map: React.FC = () => {
-  const { data: user } = useUser();
+export type MapProps = {
+  uid: string;
+  data: MapItem[];
+};
+
+export const Map: React.FC<MapProps> = ({ data, uid }) => {
   const [info, setInfo] = useState<MapItem | null>(null);
-  const [data, setData] = useState<MapItem[]>([]);
-  const [error, setError] = useState<string | undefined>();
   const [links, setLinks] = useState<string[]>([]);
   const [addLink, setAddLink] = useState<string | undefined>();
   const { isLoaded } = useJsApiLoader({
@@ -43,18 +44,15 @@ export const Map: React.FC = () => {
     googleMapsApiKey: googleMapKey,
   });
   const firestore = useFirestore();
-  const col = firestore.collection("items");
   const colLinks = firestore.collection("items_links");
   useEffect(() => {
     setLinks([]);
     if (info) {
-      console.log("get data", info.id);
       colLinks
         .where("is_active", "==", true)
-        .where("item", "==", info.id)
+        .where("item", "==", uid)
         .get()
         .then((docs) => {
-          console.log("data");
           const l: string[] = [];
           docs.forEach((doc) => {
             l.push(doc.data().link);
@@ -65,30 +63,6 @@ export const Map: React.FC = () => {
     }
     //eslint-disable-next-line
   }, [info]);
-  useEffect(() => {
-    const uns = col.where("is_active", "==", true).onSnapshot(
-      (docs) => {
-        const l: any[] = [];
-        docs.forEach((doc) => {
-          const data = doc.data();
-          l.push({
-            ...data,
-            id: doc.id,
-            video: data.video ? data.video : [],
-            pos: { lat: data.pos.latitude, lng: data.pos.longitude },
-          });
-        });
-        setData(l);
-      },
-      (err) => {
-        setError(err.message);
-      }
-    );
-    return () => {
-      uns();
-    };
-    //eslint-disable-next-line
-  }, [undefined]);
 
   const handleAddLink = useCallback(
     (links: string[]) => {
@@ -100,21 +74,14 @@ export const Map: React.FC = () => {
               link: v,
               item: addLink,
               is_active: false,
-              created_by: user.uid,
+              created_by: uid,
             });
           })
       ).catch(console.error);
       setAddLink(undefined);
     },
-    [addLink, user.uid, colLinks]
+    [addLink, uid, colLinks]
   );
-
-  if (data.length === 0 && !error) {
-    return <Loading />;
-  }
-  if (error) {
-    return <Alert className={styles.alert} message={error} type={"error"} />;
-  }
 
   return isLoaded ? (
     <>
@@ -124,15 +91,7 @@ export const Map: React.FC = () => {
           onCancel={() => setAddLink(undefined)}
         />
       )}
-      <GoogleMap
-        mapContainerStyle={{
-          width: "100%",
-          height: "100%",
-          minHeight: "480px",
-        }}
-        center={center}
-        zoom={10}
-      >
+      <GoogleMap mapContainerClassName={styles.map} center={center} zoom={10}>
         {info && (
           <InfoWindow position={info.pos} onCloseClick={() => setInfo(null)}>
             <div>
@@ -150,6 +109,7 @@ export const Map: React.FC = () => {
                   ))}
                 </div>
               )}
+              <hr />
               <Button size={"small"} onClick={() => setAddLink(info.id)}>
                 Добавить видео/фото
               </Button>
