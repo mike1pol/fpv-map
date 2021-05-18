@@ -1,0 +1,16 @@
+.toolbar {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
+  width: calc(240px);
+  padding: 5px 15px 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  transform: translate(-50%, 0);
+}
+
+.toolbar__select {
+  min-width: 200px;
+}

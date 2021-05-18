@@ -73,7 +73,7 @@ export const App: React.FC = () => {
           <Layout.Header>
             <AppMenu />
           </Layout.Header>
-          <Layout.Content>
+          <Layout.Content className={styles.content}>
             <UserCheck />
             <Switch>
               <PrivateRoute path="/" exact>

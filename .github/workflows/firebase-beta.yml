@@ -1,8 +1,8 @@
-name: Deploy to Firebase Hosting
+name: Deploy to Firebase Hosting [beta]
 on:
   push:
     branches:
-      - beta
+      - master
 jobs:
   deploy_live_website:
     runs-on: ubuntu-latest
@@ -10,6 +10,7 @@ jobs:
       REACT_APP_GOOGLE_MAP: "${{ secrets.GOOGLE_MAP_API_KEY }}"
       REACT_APP_SENTRY: "${{ secrets.SENTRY_BETA }}"
       REACT_APP_DEV: "true"
+      NODE_ENV: "production"
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build

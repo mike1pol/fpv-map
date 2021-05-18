@@ -3,6 +3,9 @@
   height: 100%;
   background: #fff;
 }
+.content {
+  position: relative;
+}
 
 .footer {
   text-align: center;
