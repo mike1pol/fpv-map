@@ -38,6 +38,7 @@ export function getMapItems({
         id: doc.id,
         name: data.name,
         description: data.description,
+        isActive: data.is_active,
         video: data.video ? data.video : [],
         pos: { lat: data.pos.latitude, lng: data.pos.longitude },
       };
@@ -57,16 +58,10 @@ export function getMapItems({
           query = query.where(filter.path, filter.opStr, filter.value === 1);
         }
       } else {
-        console.log(filter);
         query = query.where(filter.path, filter.opStr, filter.value);
       }
     }
     return query.onSnapshot(onNext, onNextError);
-    // return filters
-    //   .reduce((prev, cur) => {
-    //     return prev.where(cur.path, cur.opStr, cur.value);
-    //   }, firestore.collection("items") as any)
-    //   .onSnapshot(onNext, onNextError);
   }
   return firestore.collection("items").onSnapshot(onNext, onNextError);
 }
@@ -77,7 +72,7 @@ export const MapView: React.FC = () => {
   const defaultFilter: MapItemsFilter = {
     path: "is_active",
     opStr: "==",
-    value: -999,
+    value: 0,
   };
   const [filters, setFilters] = useState<MapItemsFilter[]>([defaultFilter]);
   const firestore = useFirestore();
@@ -112,7 +107,6 @@ export const MapView: React.FC = () => {
             value={filters[inFilters("is_active")].value}
             className={styles.toolbar__select}
             onChange={(v) => {
-              console.log(v);
               changeFilter({
                 filters,
                 onChanged: (filters: MapItemsFilter[]) => {
@@ -128,7 +122,7 @@ export const MapView: React.FC = () => {
           </Select>
         </div>
       )}
-      <Map data={data} uid={user ? user.uid : ""} />
+      <Map data={data} user={user} />
     </InviteCheck>
   );
 };
