@@ -1,3 +1,4 @@
+/* eslint-disable */
 export function isMobile() {
   const a = navigator.userAgent || navigator.vendor;
   if (
@@ -11,3 +12,4 @@ export function isMobile() {
     return true;
   }
 }
+/* eslint-enable */
