@@ -72,7 +72,7 @@ export const MapView: React.FC = () => {
   const defaultFilter: MapItemsFilter = {
     path: "is_active",
     opStr: "==",
-    value: 0,
+    value: 1,
   };
   const [filters, setFilters] = useState<MapItemsFilter[]>([defaultFilter]);
   const firestore = useFirestore();
@@ -117,8 +117,8 @@ export const MapView: React.FC = () => {
             }}
           >
             <Select.Option value={-999}>Все</Select.Option>
-            <Select.Option value={0}>Активные</Select.Option>
-            <Select.Option value={1}>Не активные</Select.Option>
+            <Select.Option value={1}>Активные</Select.Option>
+            <Select.Option value={0}>Не активные</Select.Option>
           </Select>
         </div>
       )}
