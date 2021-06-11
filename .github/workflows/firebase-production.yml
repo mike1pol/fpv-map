@@ -12,6 +12,5 @@ jobs:
       - run: npm ci && npm run build
       - uses: w9jds/firebase-action@master
         env:
-          FIREBASE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           GCP_SA_KEY: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
