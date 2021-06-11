@@ -24,8 +24,8 @@ export const UserContextView: React.FC = ({ children }) => {
             const d = doc.data();
             setUser({
               uid: data.uid,
-              isAdmin: d?.moderator,
-              isModer: d?.admin,
+              isAdmin: d?.admin,
+              isModer: d?.moderator,
             });
           },
           (e) => {

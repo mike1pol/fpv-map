@@ -6,8 +6,12 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { googleMapKey } from "../../envs";
-import { Button, Typography } from "antd";
-import { CheckOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Button, notification, Typography } from "antd";
+import {
+  CheckOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { Loading } from "../Loading";
 import { useFirestore } from "reactfire";
 
@@ -112,12 +116,26 @@ const InfoAdminBar: React.FC<{ info: MapItem; user: User | undefined }> = ({
   user,
 }) => {
   const firestore = useFirestore();
-  const handleUpdate = useCallback(async () => {
+  const handleDelete = useCallback(() => {
+    firestore
+      .doc(`items/${info.id}`)
+      .delete()
+      .then(() => {
+        notification.open({
+          message: `Спот ${info.name} удален`,
+          type: "success",
+        });
+      })
+      .catch(console.error);
+  }, [firestore, info]);
+
+  const handleUpdate = useCallback(() => {
     firestore
       .doc(`items/${info.id}`)
       .update("is_active", !info.isActive)
       .catch(console.error);
   }, [firestore, info]);
+  console.log(user);
   if (user && (user.isAdmin || user.isModer)) {
     return (
       <>
@@ -129,6 +147,16 @@ const InfoAdminBar: React.FC<{ info: MapItem; user: User | undefined }> = ({
           danger={info.isActive}
           onClick={handleUpdate}
         />
+        {user.isAdmin && (
+          <Button
+            style={{ marginLeft: "10px" }}
+            size={"small"}
+            type={"primary"}
+            icon={<DeleteOutlined />}
+            danger
+            onClick={handleDelete}
+          />
+        )}
       </>
     );
   }

@@ -46,7 +46,10 @@ const preloadSDKs = (firebaseApp: firebase.app.App) => {
     preloadFirestore({
       firebaseApp,
       setup(firestore) {
-        return firestore().enablePersistence();
+        return firestore().enablePersistence({
+          synchronizeTabs: true,
+          experimentalForceOwningTab: true,
+        });
       },
     }),
     preloadAuth({ firebaseApp }),
