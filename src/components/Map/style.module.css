@@ -8,3 +8,11 @@
   height: 100%;
   min-height: 480px;
 }
+
+.navi_block {
+  margin-bottom: 10px;
+}
+
+.navi_block a {
+  margin-right: 10px;
+}

@@ -15,11 +15,15 @@ import {
 import { Loading } from "../Loading";
 import { useFirestore } from "reactfire";
 
+import yandexIcon from "../../assets/yandex.png";
+import googleIcon from "../../assets/google.png";
+
 import styles from "./style.module.css";
 import { AddLink } from "../AddLink";
 import firebase from "firebase";
 import { defaultCity, User } from "../../userContext";
 import { mapLibraries } from "../../firebase";
+import { isMobile } from "../../functions/isMobile";
 
 export type MapItem = {
   id: string;
@@ -242,6 +246,24 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
                 {info.name}
                 <InfoAdminBar info={info} user={user} />
               </Typography.Title>
+              {isMobile() && (
+                <div className={styles.navi_block}>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`yandexnavi://build_route_on_map?lat_to=${info.pos.lat}&lon_to=${info.pos.lng}`}
+                  >
+                    <img width="16" alt="yandex navigator" src={yandexIcon} />
+                  </a>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://www.google.com/maps/search/?api=1&query=${info.pos.lat} ${info.pos.lng}`}
+                  >
+                    <img width="16" alt="google maps" src={googleIcon} />
+                  </a>
+                </div>
+              )}
               {info.description}
               {links && links.length > 0 && (
                 <div>
