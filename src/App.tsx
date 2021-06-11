@@ -24,7 +24,7 @@ import styles from "./app.module.css";
 import { MapView } from "./views/Map/Map";
 import { CreateView } from "./views/Create/Create";
 import { LoginView } from "./views/Login/Login";
-import { AppMenu } from "./components/AppMenu";
+import { AppMenu } from "./components/AppMenu/AppMenu";
 import { Loading } from "./components/Loading";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { UserCheck } from "./components/UserCheck";

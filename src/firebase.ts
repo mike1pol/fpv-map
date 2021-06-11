@@ -1,3 +1,5 @@
+import { Libraries } from "@react-google-maps/api/dist/utils/make-load-script-url";
+
 export const firebaseConfig = process.env.REACT_APP_DEV
   ? {
       apiKey: "AIzaSyBou72P3KP1OFoUXJUwYefJ78xm3vSOHcc",
@@ -17,3 +19,5 @@ export const firebaseConfig = process.env.REACT_APP_DEV
       appId: "1:594067448026:web:0672208fd8a9242e8045e3",
       measurementId: "G-626T26REX6",
     };
+
+export const mapLibraries: Libraries = ["places"];

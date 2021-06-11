@@ -19,12 +19,7 @@ import styles from "./style.module.css";
 import { AddLink } from "../AddLink";
 import firebase from "firebase";
 import { User } from "../../userContext";
-
-// Saint-P
-const center = {
-  lat: 59.939331,
-  lng: 30.316053,
-};
+import { mapLibraries } from "../../firebase";
 
 export type MapItem = {
   id: string;
@@ -135,7 +130,7 @@ const InfoAdminBar: React.FC<{ info: MapItem; user: User | undefined }> = ({
       .update("is_active", !info.isActive)
       .catch(console.error);
   }, [firestore, info]);
-  console.log(user);
+
   if (user && (user.isAdmin || user.isModer)) {
     return (
       <>
@@ -170,6 +165,7 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: googleMapKey,
+    libraries: mapLibraries,
   });
   const firestore = useFirestore();
   const colLinks = firestore.collection("items_links");
@@ -216,7 +212,7 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
     [addLink, user, colLinks]
   );
 
-  return isLoaded ? (
+  return isLoaded && user ? (
     <>
       {addLink && (
         <AddLink
@@ -224,7 +220,14 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
           onCancel={() => setAddLink(undefined)}
         />
       )}
-      <GoogleMap mapContainerClassName={styles.map} center={center} zoom={10}>
+      <GoogleMap
+        mapContainerClassName={styles.map}
+        center={{
+          lat: user?.city.lat,
+          lng: user?.city.lng,
+        }}
+        zoom={10}
+      >
         {info && (
           <InfoWindow position={info.pos} onCloseClick={() => setInfo(null)}>
             <div>
