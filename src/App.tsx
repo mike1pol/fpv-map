@@ -65,6 +65,7 @@ export const AppWrapper: React.FC = () => {
 
 export const App: React.FC = () => {
   const firebaseApp = useFirebaseApp();
+  firebase.analytics(firebaseApp);
   preloadSDKs(firebaseApp).catch((err) => console.error(err));
   return (
     <SuspenseWithPerf traceId="firebase-app" fallback={<Loading />}>
