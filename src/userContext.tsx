@@ -10,7 +10,7 @@ export type User = {
   city: City;
 };
 
-const defaultCity: City = {
+export const defaultCity: City = {
   name: "Санкт-Петербург",
   lat: 59.9310584,
   lng: 30.3609097,

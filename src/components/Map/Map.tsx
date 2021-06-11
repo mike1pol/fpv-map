@@ -18,7 +18,7 @@ import { useFirestore } from "reactfire";
 import styles from "./style.module.css";
 import { AddLink } from "../AddLink";
 import firebase from "firebase";
-import { User } from "../../userContext";
+import { defaultCity, User } from "../../userContext";
 import { mapLibraries } from "../../firebase";
 
 export type MapItem = {
@@ -159,6 +159,10 @@ const InfoAdminBar: React.FC<{ info: MapItem; user: User | undefined }> = ({
 };
 
 export const Map: React.FC<MapProps> = ({ data, user }) => {
+  const [center, setCenter] = useState({
+    lat: defaultCity.lat,
+    lng: defaultCity.lng,
+  });
   const [info, setInfo] = useState<MapItem | null>(null);
   const [links, setLinks] = useState<Link[]>([]);
   const [addLink, setAddLink] = useState<string | undefined>();
@@ -179,6 +183,16 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
       }
     }
   }, [data, info]);
+
+  useEffect(() => {
+    if (info && (info.pos.lat !== center.lat || info.pos.lng !== center.lng)) {
+      setCenter(info.pos);
+    }
+  }, [info, center]);
+
+  useEffect(() => {
+    user?.city && setCenter(user.city);
+  }, [user?.city]);
 
   useEffect(() => {
     setLinks([]);
@@ -220,14 +234,7 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
           onCancel={() => setAddLink(undefined)}
         />
       )}
-      <GoogleMap
-        mapContainerClassName={styles.map}
-        center={{
-          lat: user?.city.lat,
-          lng: user?.city.lng,
-        }}
-        zoom={10}
-      >
+      <GoogleMap mapContainerClassName={styles.map} center={center} zoom={10}>
         {info && (
           <InfoWindow position={info.pos} onCloseClick={() => setInfo(null)}>
             <div>

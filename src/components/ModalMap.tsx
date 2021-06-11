@@ -3,6 +3,7 @@ import { Button, Modal } from "antd";
 import { InfoWindow, GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { googleMapKey } from "../envs";
 import { Loading } from "./Loading";
+import { mapLibraries } from "../firebase";
 
 export type ModalMapProps = {
   visible: boolean;
@@ -18,6 +19,7 @@ export const ModalMap: React.FC<ModalMapProps> = ({ visible, onClose }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: googleMapKey,
+    libraries: mapLibraries,
   });
   const [ll, setLL] = useState<{ lat: number; lng: number } | undefined>();
   return (
