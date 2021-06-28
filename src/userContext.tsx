@@ -24,7 +24,7 @@ export const UserContextView: React.FC = ({ children }) => {
   const firestore = useFirestore();
   useEffect(() => {
     let u: User = {
-      uid: data.uid,
+      uid: data && data.uid ? data.uid : "",
       isAdmin: false,
       isModer: false,
       hasProfile: false,
