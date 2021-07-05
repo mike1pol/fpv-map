@@ -8,21 +8,24 @@ export const InviteCheck: React.FC = ({ children }) => {
   const firestore = useFirestore();
   const { data: user } = useUser();
   const [err, setErr] = useState<string | undefined>();
-  const doc = firestore.doc(`invite/${user.email}`);
   useEffect(() => {
-    const uns = doc.onSnapshot(
-      () => {
-        setErr(undefined);
-      },
-      (error) => {
-        setErr(error.code);
-      }
-    );
+    let uns: any = undefined;
+    if (user && user.email) {
+      const doc = firestore.doc(`invite/${user.email}`);
+      uns = doc.onSnapshot(
+        () => {
+          setErr(undefined);
+        },
+        (error) => {
+          setErr(error.code);
+        }
+      );
+    }
     return () => {
-      uns();
+      uns && uns();
     };
     //eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   return err ? (
     <Alert
