@@ -246,24 +246,26 @@ export const Map: React.FC<MapProps> = ({ data, user }) => {
                 {info.name}
                 <InfoAdminBar info={info} user={user} />
               </Typography.Title>
-              {isMobile() && (
-                <div className={styles.navi_block}>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`yandexnavi://build_route_on_map?lat_to=${info.pos.lat}&lon_to=${info.pos.lng}`}
-                  >
-                    <img width="16" alt="yandex navigator" src={yandexIcon} />
-                  </a>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`https://www.google.com/maps/search/?api=1&query=${info.pos.lat} ${info.pos.lng}`}
-                  >
-                    <img width="16" alt="google maps" src={googleIcon} />
-                  </a>
-                </div>
-              )}
+              <div className={styles.navi_block}>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={
+                    isMobile()
+                      ? `yandexnavi://build_route_on_map?lat_to=${info.pos.lat}&lon_to=${info.pos.lng}`
+                      : `https://maps.yandex.ru/?pt=${info.pos.lng},${info.pos.lat}`
+                  }
+                >
+                  <img width="16" alt="yandex navigator" src={yandexIcon} />
+                </a>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`https://www.google.com/maps/search/?api=1&query=${info.pos.lat} ${info.pos.lng}`}
+                >
+                  <img width="16" alt="google maps" src={googleIcon} />
+                </a>
+              </div>
               {info.description}
               {links && links.length > 0 && (
                 <div>
